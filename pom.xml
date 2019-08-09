@@ -7,7 +7,7 @@
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>Tree</name>
-  <description>Java Tree Implementation</description>
+  <description>Simple Java Tree Implementation</description>
   <url>https://veary.org</url>
 
   <properties>
@@ -73,9 +73,6 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>3.0.0-M3</version>
-          <configuration>
-            <argLine>--add-opens java.base/java.lang=com.google.guice ${argLine}</argLine>
-          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>

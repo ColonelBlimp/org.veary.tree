@@ -30,6 +30,12 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
+/**
+ *
+ * @author Marc L. Veary
+ * @since 1.0
+ * @param <T>
+ */
 public final class TreeNode<T> implements Iterable<TreeNode<T>> {
 
     private final T data;

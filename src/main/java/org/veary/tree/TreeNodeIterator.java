@@ -28,6 +28,12 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Stack;
 
+/**
+ *
+ * @author Marc L. Veary
+ * @since 1.0
+ * @param <T>
+ */
 public final class TreeNodeIterator<T> implements Iterator<TreeNode<T>> {
 
     private final Stack<TreeNode<T>> stack;
