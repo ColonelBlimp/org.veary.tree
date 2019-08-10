@@ -40,9 +40,25 @@ import java.util.Optional;
  */
 public final class TreeNode<T> implements Iterable<TreeNode<T>> {
 
+    /**
+     * The data object associated with this node.
+     */
     private final T data;
+
+    /**
+     * List of childen to this node.
+     */
     private final List<TreeNode<T>> children;
+
+    /**
+     * List of TreeNode<T> objects in insertion order. In the root node, this member contains all
+     * the nodes in the tree in their insertion order.
+     */
     private final List<TreeNode<T>> searchIndex;
+
+    /**
+     * The parent node for this node.
+     */
     private TreeNode<T> parent;
 
     /**
@@ -97,9 +113,8 @@ public final class TreeNode<T> implements Iterable<TreeNode<T>> {
      * Returns the parent node of this node.
      *
      * @return {@code TreeNode<T>} object. Non-{@code null}.
-     * @throws NoSuchElementException if this is the root node (i.e. has no parent).
-     *                                Use {@link #isRoot()} before calling this
-     *                                method.
+     * @throws NoSuchElementException if this is the root node (i.e. has no parent). Use
+     *     {@link #isRoot()} before calling this method.
      */
     public TreeNode<T> getParent() {
         if (this.parent != null) {
@@ -127,8 +142,8 @@ public final class TreeNode<T> implements Iterable<TreeNode<T>> {
     }
 
     /**
-     * Returns {@code true} if this is the last node (i.e. has no children),
-     * otherwise {@code false}.
+     * Returns {@code true} if this is the last node (i.e. has no children), otherwise
+     * {@code false}.
      *
      * @return boolean
      */
@@ -162,6 +177,10 @@ public final class TreeNode<T> implements Iterable<TreeNode<T>> {
             }
         }
         return Optional.empty();
+    }
+
+    public List<TreeNode<T>> getSearchIndex() {
+        return this.searchIndex;
     }
 
     /**

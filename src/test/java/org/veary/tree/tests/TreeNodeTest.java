@@ -84,6 +84,7 @@ public class TreeNodeTest {
             System.out.println(node.getData() + " - Level(" + node.getLevel() + "), root: "
                 + node.getRoot().getData());
         }
+        System.out.println();
     }
 
     @Test(
@@ -119,6 +120,25 @@ public class TreeNodeTest {
             });
 
         Assert.assertTrue(resultNotFound.isEmpty());
+    }
+
+    @Test
+    public void ordering() {
+        TreeNode<String> root = new TreeNode<>("BALANCE");
+        TreeNode<String> netWorth = root.addChild("NET WORTH");
+        netWorth.addChild("ASSETS");
+        netWorth.addChild("LIABILITIES");
+
+        TreeNode<String> incomeExpenses = root.addChild("INCOME & EXPENSES");
+        incomeExpenses.addChild("INCOME");
+        incomeExpenses.addChild("EXPENSES");
+        root.addChild("OPENING BALANCE");
+
+        for (TreeNode<String> node : root) {
+            System.out.println(node.getData() + " - Level(" + node.getLevel() + "), root: "
+                + node.getRoot().getData());
+        }
+        System.out.println();
     }
 
     private TreeNode<String> buildTree() {
