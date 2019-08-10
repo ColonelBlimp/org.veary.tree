@@ -27,21 +27,29 @@ package org.veary.tree.tests;
 import org.testng.annotations.Test;
 import org.veary.tree.TreeNode;
 
-public class SearchIndexTest {
+public class InterationTest {
 
     @Test
     public void listSearchIndex() {
         TreeNode<String> root = new TreeNode<>("BALANCE");
         TreeNode<String> netWorth = root.addChild("NET WORTH");
-        netWorth.addChild("ASSETS");
-        netWorth.addChild("LIABILITIES");
-
+        TreeNode<String> assets = netWorth.addChild("ASSETS");
+        assets.addChild("Cash");
+        assets.addChild("Bank");
+        TreeNode<String> liabilities = netWorth.addChild("LIABILITIES");
+        liabilities.addChild("Credit Card");
+        liabilities.addChild("Bank Loan");
+        liabilities.addChild("Mortgage");
         TreeNode<String> incomeExpenses = root.addChild("INCOME & EXPENSES");
         incomeExpenses.addChild("INCOME");
         incomeExpenses.addChild("EXPENSES");
         root.addChild("OPENING BALANCE");
 
-        for (TreeNode<String> node : root.getSearchIndex()) {
+        for (TreeNode<String> node : root) {
+            int level = node.getLevel();
+            if (level > 0) {
+                System.out.format("%" + node.getLevel() + "s", " ");
+            }
             System.out.println(node.getData());
         }
     }

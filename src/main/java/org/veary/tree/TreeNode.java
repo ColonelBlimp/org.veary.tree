@@ -179,10 +179,6 @@ public final class TreeNode<T> implements Iterable<TreeNode<T>> {
         return Optional.empty();
     }
 
-    public List<TreeNode<T>> getSearchIndex() {
-        return this.searchIndex;
-    }
-
     /**
      * Returns the number of nodes under this branch of the tree.
      *
@@ -194,7 +190,29 @@ public final class TreeNode<T> implements Iterable<TreeNode<T>> {
 
     @Override
     public Iterator<TreeNode<T>> iterator() {
-        return new TreeNodeIterator<>(this);
+        //        return new TreeNodeIterator<>(this);
+        return new Iterator<TreeNode<T>>() {
+
+            private TreeNode<T> next;
+            private Iterator<TreeNode<T>> iterator = TreeNode.this.searchIndex.iterator();
+
+            @Override
+            public boolean hasNext() {
+                if (this.iterator.hasNext()) {
+                    this.next = this.iterator.next();
+                    return true;
+                }
+                return false;
+            }
+
+            @Override
+            public TreeNode<T> next() {
+                if (this.next != null) {
+                    return this.next;
+                }
+                throw new NoSuchElementException();
+            }
+        };
     }
 
     /**
