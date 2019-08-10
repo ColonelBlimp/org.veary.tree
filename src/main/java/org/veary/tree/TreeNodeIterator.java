@@ -68,7 +68,7 @@ public final class TreeNodeIterator<T> implements Iterator<TreeNode<T>> {
     /**
      * Returns the next element in the iteration.
      *
-     * @return the next element in the iteration. Not {@code null}.
+     * @return the next element in the iteration. Non-{@code null}.
      * @throws NoSuchElementException if the iteration has no more elements
      */
     @Override

@@ -95,7 +95,8 @@ public final class TreeNode<T> implements Iterable<TreeNode<T>> {
      * Returns the parent node of this node.
      *
      * @return {@code TreeNode<T>} object. Non-{@code null}.
-     * @throws NoSuchElementException if this is the root node (i.e. has no parent)
+     * @throws NoSuchElementException if this is the root node (i.e. has no parent). Use
+     *     {@link #isRoot()} before calling this method.
      */
     public TreeNode<T> getParent() {
         if (this.parent != null) {
