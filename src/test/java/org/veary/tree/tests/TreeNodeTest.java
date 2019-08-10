@@ -26,6 +26,7 @@ package org.veary.tree.tests;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -91,6 +92,18 @@ public class TreeNodeTest {
     public void getParentException() {
         TreeNode<String> root = new TreeNode<>(ROOT_DATA);
         root.getParent();
+    }
+
+    @Test
+    public void findNode() {
+        TreeNode<String> root = buildTree();
+        Assert.assertTrue(root.size() == 12);
+
+        Optional<TreeNode<String>> resultFound = root.findNode(CHILD2124);
+        Assert.assertTrue(resultFound.isPresent());
+
+        Optional<TreeNode<String>> resultNotFound = root.findNode("TEST DATA");
+        Assert.assertTrue(resultNotFound.isEmpty());
     }
 
     private TreeNode<String> buildTree() {

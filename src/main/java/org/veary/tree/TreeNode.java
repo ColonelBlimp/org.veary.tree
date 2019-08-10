@@ -29,6 +29,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * <b>Purpose:</b> Simple Tree implementation.
@@ -41,7 +42,7 @@ public final class TreeNode<T> implements Iterable<TreeNode<T>> {
 
     private final T data;
     private final List<TreeNode<T>> children;
-    private final List<TreeNode<T>> elements;
+    private final List<TreeNode<T>> searchIndex;
     private TreeNode<T> parent;
 
     /**
@@ -52,8 +53,8 @@ public final class TreeNode<T> implements Iterable<TreeNode<T>> {
     public TreeNode(T data) {
         this.data = Objects.requireNonNull(data, "Parameter 'data' cannot be null.");
         this.children = new ArrayList<>();
-        this.elements = new ArrayList<>();
-        this.elements.add(this);
+        this.searchIndex = new ArrayList<>();
+        this.searchIndex.add(this);
     }
 
     /**
@@ -67,6 +68,7 @@ public final class TreeNode<T> implements Iterable<TreeNode<T>> {
         TreeNode<T> childNode = new TreeNode<>(child);
         childNode.parent = this;
         this.children.add(childNode);
+        addChildToSearchIndex(childNode);
         return childNode;
     }
 
@@ -95,8 +97,9 @@ public final class TreeNode<T> implements Iterable<TreeNode<T>> {
      * Returns the parent node of this node.
      *
      * @return {@code TreeNode<T>} object. Non-{@code null}.
-     * @throws NoSuchElementException if this is the root node (i.e. has no parent). Use
-     *     {@link #isRoot()} before calling this method.
+     * @throws NoSuchElementException if this is the root node (i.e. has no parent).
+     *                                Use {@link #isRoot()} before calling this
+     *                                method.
      */
     public TreeNode<T> getParent() {
         if (this.parent != null) {
@@ -124,8 +127,8 @@ public final class TreeNode<T> implements Iterable<TreeNode<T>> {
     }
 
     /**
-     * Returns {@code true} if this is the last node (i.e. has no children), otherwise
-     * {@code false}.
+     * Returns {@code true} if this is the last node (i.e. has no children),
+     * otherwise {@code false}.
      *
      * @return boolean
      */
@@ -146,8 +149,44 @@ public final class TreeNode<T> implements Iterable<TreeNode<T>> {
         }
     }
 
+    /**
+     * Search from this node for a node containing the given data.
+     *
+     * @param data
+     * @return
+     */
+    public Optional<TreeNode<T>> findNode(T data) {
+        for (TreeNode<T> element : this.searchIndex) {
+            if (data.equals(element.data)) {
+                return Optional.of(element);
+            }
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Returns the number of nodes under this branch of the tree.
+     *
+     * @return {@code int} the number of children
+     */
+    public int size() {
+        return this.searchIndex.size();
+    }
+
     @Override
     public Iterator<TreeNode<T>> iterator() {
         return new TreeNodeIterator<>(this);
+    }
+
+    /**
+     * Registers the referenced node in the {@link #searchIndex}.
+     *
+     * @param node the {@code TreeNode<T>} to be added to the index.
+     */
+    private void addChildToSearchIndex(TreeNode<T> node) {
+        this.searchIndex.add(node);
+        if (this.parent != null) {
+            this.parent.addChildToSearchIndex(node);
+        }
     }
 }
