@@ -41,9 +41,13 @@ public class InterationTest {
         liabilities.addChild("Bank Loan");
         liabilities.addChild("Mortgage");
         TreeNode<String> incomeExpenses = root.addChild("INCOME & EXPENSES");
-        incomeExpenses.addChild("INCOME");
-        incomeExpenses.addChild("EXPENSES");
+        TreeNode<String> income = incomeExpenses.addChild("INCOME");
+        TreeNode<String> expenses = incomeExpenses.addChild("EXPENSES");
         root.addChild("OPENING BALANCE");
+        income.addChild("Salary");
+        income.addChild("Sales");
+        expenses.addChild("Fuel");
+        expenses.addChild("Food");
 
         for (TreeNode<String> node : root) {
             int level = node.getLevel();
@@ -52,5 +56,6 @@ public class InterationTest {
             }
             System.out.println(node.getData());
         }
+        System.out.println();
     }
 }

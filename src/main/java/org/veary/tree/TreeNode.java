@@ -25,7 +25,9 @@
 package org.veary.tree;
 
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -190,18 +192,44 @@ public final class TreeNode<T> implements Iterable<TreeNode<T>> {
 
     @Override
     public Iterator<TreeNode<T>> iterator() {
-        //        return new TreeNodeIterator<>(this);
         return new Iterator<TreeNode<T>>() {
 
+            private boolean processedParent = false;
             private TreeNode<T> next;
-            private Iterator<TreeNode<T>> iterator = TreeNode.this.searchIndex.iterator();
+
+            /**
+             * LIFO stack of Iterators
+             */
+            private final Deque<Iterator<TreeNode<T>>> iteratorStack = new LinkedList<>();
+
+            // Initialization
+            {
+                this.iteratorStack.addFirst(TreeNode.this.children.iterator());
+            }
 
             @Override
             public boolean hasNext() {
-                if (this.iterator.hasNext()) {
-                    this.next = this.iterator.next();
+
+                if (!this.processedParent) {
+                    this.next = TreeNode.this;
+                    this.processedParent = true;
                     return true;
                 }
+
+                Iterator<TreeNode<T>> it = this.iteratorStack.removeFirst();
+                this.next = null;
+
+                if (it.hasNext()) {
+                    this.next = it.next();
+                    this.iteratorStack.addFirst(it);
+                    this.iteratorStack.addFirst(this.next.children.iterator());
+                    return true;
+                }
+
+                if (!this.iteratorStack.isEmpty()) {
+                    return hasNext();
+                }
+
                 return false;
             }
 
