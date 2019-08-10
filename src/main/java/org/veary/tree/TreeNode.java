@@ -152,12 +152,12 @@ public final class TreeNode<T> implements Iterable<TreeNode<T>> {
     /**
      * Search from this node for a node containing the given data.
      *
-     * @param data
-     * @return
+     * @param search an instance of {@link TreeNodeSearch}
+     * @return {@code Optional<TreeNode<T>>}
      */
-    public Optional<TreeNode<T>> findNode(T data) {
+    public Optional<TreeNode<T>> findNode(TreeNodeSearch<T> search) {
         for (TreeNode<T> element : this.searchIndex) {
-            if (data.equals(element.data)) {
+            if (search.execute(element.data)) {
                 return Optional.of(element);
             }
         }
@@ -188,5 +188,24 @@ public final class TreeNode<T> implements Iterable<TreeNode<T>> {
         if (this.parent != null) {
             this.parent.addChildToSearchIndex(node);
         }
+    }
+
+    /**
+     * SAM type interface for use with a <i>lambda</i> expression.
+     *
+     * @author Marc L. Veary
+     * @since 1.0
+     * @param <T>
+     * @see TreeNode#findNode(TreeNodeSearch)
+     */
+    public interface TreeNodeSearch<T> {
+
+        /**
+         * Execute a search for a node.
+         *
+         * @param data the node's data
+         * @return {@code true} if a match is found, otherwise {@code false}
+         */
+        boolean execute(T data);
     }
 }

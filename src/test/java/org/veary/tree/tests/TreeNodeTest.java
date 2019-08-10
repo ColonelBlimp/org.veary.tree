@@ -99,20 +99,35 @@ public class TreeNodeTest {
         TreeNode<String> root = buildTree();
         Assert.assertTrue(root.size() == 12);
 
-        Optional<TreeNode<String>> resultFound = root.findNode(CHILD2124);
-        Assert.assertTrue(resultFound.isPresent());
+        Optional<TreeNode<String>> resultFound = root.findNode(
+            element -> {
+                if (element.equals(CHILD2124)) {
+                    return true;
+                }
+                return false;
+            });
 
-        Optional<TreeNode<String>> resultNotFound = root.findNode("TEST DATA");
+        Assert.assertTrue(resultFound.isPresent());
+        Assert.assertEquals(resultFound.get().getData(), CHILD2124);
+
+        Optional<TreeNode<String>> resultNotFound = root.findNode(
+            element -> {
+                if (element.equals("TEST DATA")) {
+                    return true;
+                }
+                return false;
+            });
+
         Assert.assertTrue(resultNotFound.isEmpty());
     }
 
     private TreeNode<String> buildTree() {
         TreeNode<String> root = new TreeNode<>(ROOT_DATA);
         TreeNode<String> child1 = root.addChild(CHILD1);
+        TreeNode<String> child2 = root.addChild(CHILD2);
         child1.addChild(CHILD11);
         child1.addChild(CHILD12);
 
-        TreeNode<String> child2 = root.addChild(CHILD2);
         TreeNode<String> child21 = child2.addChild(CHILD21);
         child21.addChild(CHILD211);
         TreeNode<String> child212 = child21.addChild(CHILD212);
