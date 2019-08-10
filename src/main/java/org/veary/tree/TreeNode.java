@@ -167,7 +167,7 @@ public final class TreeNode<T> implements Iterable<TreeNode<T>> {
     }
 
     /**
-     * Search from this node for a node containing the given data.
+     * Search from this node for a sub-node whose data fulfils the search criteria.
      *
      * @param search an instance of {@link TreeNodeSearch}
      * @return {@code Optional<TreeNode<T>>}
@@ -210,6 +210,20 @@ public final class TreeNode<T> implements Iterable<TreeNode<T>> {
     /**
      * SAM type interface for use with a <i>lambda</i> expression.
      *
+     * <p><b>Usage example:</b>
+     *
+     * <pre>
+     * Optional<TreeNode<String>> result = root.findNode(element -> {
+     *     if (element.equals("Test String")) {
+     *         return true;
+     *     }
+     *     return false;
+     * });
+     * </pre>
+     *
+     * <p>The above will search from the {@code root} of the tree looking for node whose data
+     * {@code equals("Test String")}
+     *
      * @author Marc L. Veary
      * @since 1.0
      * @param <T>
@@ -227,11 +241,13 @@ public final class TreeNode<T> implements Iterable<TreeNode<T>> {
     }
 
     /**
+     * <b>Purpose:</b> Private inner class implementing {@link Iterator}.
      *
      * @author Marc L. Veary
      * @since 1.0
      */
     private class TreeNodeIterator implements Iterator<TreeNode<T>> {
+
         /**
          * LIFO stack of Iterators to process
          */
