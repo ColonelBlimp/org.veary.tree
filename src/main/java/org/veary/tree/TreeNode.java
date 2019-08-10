@@ -31,10 +31,11 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 
 /**
+ * <b>Purpose:</b> Simple Tree implementation.
  *
  * @author Marc L. Veary
  * @since 1.0
- * @param <T>
+ * @param <T> type of object
  */
 public final class TreeNode<T> implements Iterable<TreeNode<T>> {
 
@@ -65,7 +66,7 @@ public final class TreeNode<T> implements Iterable<TreeNode<T>> {
         Objects.requireNonNull(child, "Parameter 'child' cannot be null.");
         TreeNode<T> childNode = new TreeNode<>(child);
         childNode.parent = this;
-        this.children.add(0, childNode);
+        this.children.add(childNode);
         return childNode;
     }
 
@@ -131,6 +132,11 @@ public final class TreeNode<T> implements Iterable<TreeNode<T>> {
         return this.children.isEmpty();
     }
 
+    /**
+     * Returns the level of this node. Root is zero (0).
+     *
+     * @return {@code int} indicating the level of this node
+     */
     public int getLevel() {
         if (this.isRoot()) {
             return 0;

@@ -24,19 +24,21 @@
 
 package org.veary.tree;
 
+import java.util.Deque;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.NoSuchElementException;
-import java.util.Stack;
 
 /**
+ * <b>Purpose:</b> {@link Iterator} implementation for {@link TreeNode}.
  *
  * @author Marc L. Veary
  * @since 1.0
- * @param <T>
+ * @param <T> type of object
  */
 public final class TreeNodeIterator<T> implements Iterator<TreeNode<T>> {
 
-    private final Stack<TreeNode<T>> stack;
+    private final Deque<TreeNode<T>> stack;
     private TreeNode<T> next;
 
     /**
@@ -45,7 +47,7 @@ public final class TreeNodeIterator<T> implements Iterator<TreeNode<T>> {
      * @param parent {@code TreeNode<T>}
      */
     public TreeNodeIterator(TreeNode<T> parent) {
-        this.stack = new Stack<TreeNode<T>>();
+        this.stack = new LinkedList<>();
         this.stack.push(parent);
     }
 
