@@ -192,55 +192,7 @@ public final class TreeNode<T> implements Iterable<TreeNode<T>> {
 
     @Override
     public Iterator<TreeNode<T>> iterator() {
-        return new Iterator<TreeNode<T>>() {
-
-            private boolean processedParent = false;
-            private TreeNode<T> next;
-
-            /**
-             * LIFO stack of Iterators
-             */
-            private final Deque<Iterator<TreeNode<T>>> iteratorStack = new LinkedList<>();
-
-            // Initialization
-            {
-                this.iteratorStack.addFirst(TreeNode.this.children.iterator());
-            }
-
-            @Override
-            public boolean hasNext() {
-
-                if (!this.processedParent) {
-                    this.next = TreeNode.this;
-                    this.processedParent = true;
-                    return true;
-                }
-
-                Iterator<TreeNode<T>> it = this.iteratorStack.removeFirst();
-                this.next = null;
-
-                if (it.hasNext()) {
-                    this.next = it.next();
-                    this.iteratorStack.addFirst(it);
-                    this.iteratorStack.addFirst(this.next.children.iterator());
-                    return true;
-                }
-
-                if (!this.iteratorStack.isEmpty()) {
-                    return hasNext();
-                }
-
-                return false;
-            }
-
-            @Override
-            public TreeNode<T> next() {
-                if (this.next != null) {
-                    return this.next;
-                }
-                throw new NoSuchElementException();
-            }
-        };
+        return new TreeNodeIterator(this);
     }
 
     /**
@@ -272,5 +224,76 @@ public final class TreeNode<T> implements Iterable<TreeNode<T>> {
          * @return {@code true} if a match is found, otherwise {@code false}
          */
         boolean execute(T data);
+    }
+
+    /**
+     *
+     * @author Marc L. Veary
+     * @since 1.0
+     */
+    private class TreeNodeIterator implements Iterator<TreeNode<T>> {
+        /**
+         * LIFO stack of Iterators to process
+         */
+        private final Deque<Iterator<TreeNode<T>>> iteratorStack;
+
+        /**
+         * The parent node from which iteration starts.
+         */
+        private final TreeNode<T> parent;
+
+        /**
+         * Marker indicating if the parent node has been processed.
+         */
+        private boolean processedParent = false;
+
+        /**
+         * Returned by a call to {@link #next()}.
+         */
+        private TreeNode<T> next;
+
+        /**
+         * Private constructor.
+         *
+         * @param parent {@code TreeNode<T>}
+         */
+        private TreeNodeIterator(TreeNode<T> parent) {
+            this.parent = parent;
+            this.iteratorStack = new LinkedList<>();
+            this.iteratorStack.addFirst(parent.children.iterator());
+        }
+
+        @Override
+        public boolean hasNext() {
+            if (!this.processedParent) {
+                this.next = this.parent;
+                this.processedParent = true;
+                return true;
+            }
+
+            Iterator<TreeNode<T>> it = this.iteratorStack.removeFirst();
+            this.next = null;
+
+            if (it.hasNext()) {
+                this.next = it.next();
+                this.iteratorStack.addFirst(it);
+                this.iteratorStack.addFirst(this.next.children.iterator());
+                return true;
+            }
+
+            if (!this.iteratorStack.isEmpty()) {
+                return hasNext();
+            }
+
+            return false;
+        }
+
+        @Override
+        public TreeNode<T> next() {
+            if (this.next != null) {
+                return this.next;
+            }
+            throw new NoSuchElementException();
+        }
     }
 }
