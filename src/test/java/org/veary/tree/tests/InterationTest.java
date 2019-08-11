@@ -46,8 +46,10 @@ public class InterationTest {
         root.addChild("OPENING BALANCE");
         income.addChild("Salary");
         income.addChild("Sales");
-        expenses.addChild("Fuel");
         expenses.addChild("Food");
+
+        TreeNode<String> car = expenses.addChild("Car");
+        car.addChild("Fuel");
 
         for (TreeNode<String> node : root) {
             int level = node.getLevel();
