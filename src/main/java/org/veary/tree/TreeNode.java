@@ -264,51 +264,55 @@ public final class TreeNode<T> implements Iterable<TreeNode<T>> {
         private boolean processedParent = false;
 
         /**
-         * Returned by a call to {@link #next()}.
-         */
-        private TreeNode<T> next;
-
-        /**
          * Private constructor.
          *
          * @param parent {@code TreeNode<T>}
          */
         private TreeNodeIterator(TreeNode<T> parent) {
-            this.parent = parent;
+            this.parent = Objects.requireNonNull(parent, "Parameter 'parent' cannot be null.");
             this.iteratorStack = new LinkedList<>();
-            this.iteratorStack.addFirst(parent.children.iterator());
+
         }
 
         @Override
         public boolean hasNext() {
+
             if (!this.processedParent) {
-                this.next = this.parent;
-                this.processedParent = true;
                 return true;
             }
 
-            Iterator<TreeNode<T>> it = this.iteratorStack.removeFirst();
-            this.next = null;
-
-            if (it.hasNext()) {
-                this.next = it.next();
-                this.iteratorStack.addFirst(it);
-                this.iteratorStack.addFirst(this.next.children.iterator());
-                return true;
+            if (this.iteratorStack.isEmpty()) {
+                return false;
             }
 
-            if (!this.iteratorStack.isEmpty()) {
-                return hasNext();
-            }
-
-            return false;
+            return this.iteratorStack.getFirst().hasNext();
         }
 
         @Override
         public TreeNode<T> next() {
-            if (this.next != null) {
-                return this.next;
+
+            if (!this.processedParent) {
+                this.processedParent = true;
+                this.iteratorStack.addFirst(this.parent.children.iterator());
+                return this.parent;
             }
+
+            Iterator<TreeNode<T>> it = this.iteratorStack.removeFirst();
+
+            if (it.hasNext()) {
+                TreeNode<T> next = it.next();
+
+                if (it.hasNext()) {
+                    this.iteratorStack.addFirst(it);
+                }
+
+                if (!next.children.isEmpty()) {
+                    this.iteratorStack.addFirst(next.children.iterator());
+                }
+
+                return next;
+            }
+
             throw new NoSuchElementException();
         }
     }
